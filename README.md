@@ -1,4 +1,4 @@
-# vue3-app-ead
+# Projeto Vue JS 3 - EAD
 
 ## Project setup
 ```
