@@ -1,12 +1,12 @@
 <template>
-    <form action="#" method="post" @submit.prevent="login">
+    <form action="#" method="post" @submit.prevent="auth">
         <div class="groupForm">
             <i class="far fa-envelope"></i>
-            <input type="email" name="email" placeholder="Email" required>
+            <input type="email" name="email" placeholder="Email">
         </div>
         <div class="groupForm">
             <i class="far fa-key"></i>
-            <input type="password" name="password" placeholder="Senha" required>
+            <input type="password" name="password" placeholder="Senha">
             <i class="far fa-eye buttom"></i>
         </div>
         <button class="btn primary" type="submit">Login</button>
@@ -21,23 +21,32 @@
 
 <script>
 import { onBeforeMount } from 'vue'
-import router from '@/router'
+import { useStore } from 'vuex'
+//import router from '@/router'
 
 export default {
     name: 'Auth',
 
     setup() {
 
-    onBeforeMount(() => {
-      document.title = 'Login - Curso EAD com Vue.js 3'
-    })
+        const store = useStore()
 
-    const login = () => { router.push({name: 'campus.home'}) }
+        onBeforeMount(() => {
+        document.title = 'Login - Curso EAD com Vue.js 3'
+        })
 
-    return {
-        login
+        const auth = () => {
+            store.dispatch('auth', {
+                email: 'nunes.eduardo1993@gmail.com',
+                password: '123456',
+                device_name: 'auth_by_vue3'
+            })
+        }
+
+        return {
+            auth
+        }
+
     }
-
-  }
 }
 </script>
