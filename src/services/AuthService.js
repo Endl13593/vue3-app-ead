@@ -1,4 +1,5 @@
 import BaseService from "./BaseService";
+import { TOKEN_NAME } from '@/configs'
 
 export default class AuthService extends BaseService {
 
@@ -7,7 +8,10 @@ export default class AuthService extends BaseService {
 
             this.request()
                 .post('/auth', params)
-                .then(response => resolve(response))
+                .then(response => {
+                    localStorage.setItem(TOKEN_NAME, response.data.token)
+                    resolve(response)
+                })
                 .catch(error => reject(error.response))
 
         })

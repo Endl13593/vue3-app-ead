@@ -1,5 +1,5 @@
 <template>
-    <form action="#" method="post" @submit.prevent="auth">
+    <form action="#" method="post" @submit.prevent="resetPassword">
         <div class="groupForm">
             <i class="far fa-envelope"></i>
             <input type="email" name="email" placeholder="Email" v-model="email">
@@ -10,51 +10,47 @@
             <i class="far fa-eye buttom"></i>
         </div>
         <button class="btn primary" type="submit" :disabled="loading">
-            <span v-if="loading">Autenticando...</span>
-            <span v-else>Login</span>
+            <span v-if="loading">Processando...</span>
+            <span v-else>Atualizar Senha</span>
         </button>
     </form>
-    <span>
-        <p class="fontSmall">
-            Esqueceu sua senha?
-            <router-link :to="{name: 'forget.password'}" class="link primary">Clique aqui</router-link>
-        </p>
-    </span>
 </template>
 
 <script>
 import { onBeforeMount, ref } from 'vue'
-import { useStore } from 'vuex'
 import router from '@/router'
+import PasswordResetService from '@/services/PasswordResetService'
 import { notify } from "@kyvg/vue3-notification";
 
-
 export default {
-    name: 'Auth',
+    name: 'ResetPassword',
 
-    setup() {
-        const store = useStore()
+    props: {
+        token: { type: String, require: true }
+    },
+
+    setup(props) {
         const email = ref('')
         const password = ref('')
         const loading = ref(false)
 
         onBeforeMount(() => {
-        document.title = 'Login - Curso EAD com Vue.js 3'
+        document.title = 'Resetar Senha - Curso EAD com Vue.js 3'
         })
 
-        const auth = () => {
+        const resetPassword = () => {
             loading.value = true
 
-            store.dispatch('auth', {
+            PasswordResetService.resetPassword({
                 email: email.value,
                 password: password.value,
-                device_name: 'app_web'
+                token: props.token
             })
             .then(() => {
-                router.push({ name: 'campus.home' })
+                router.push({ name: 'auth' })
                 notify({
                     title: "Sucesso!",
-                    text: "Logado com sucesso!",
+                    text: "Nova Senha cadastrada com sucesso!",
                     type: 'success'
                 });
             })
@@ -75,7 +71,7 @@ export default {
         }
 
         return {
-            auth,
+            resetPassword,
             email,
             password,
             loading
